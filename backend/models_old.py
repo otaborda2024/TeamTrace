@@ -1,3 +1,5 @@
+'''
+
 import datetime
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean
 import database
@@ -53,3 +55,6 @@ class Alert(database.Base):
     job_site_id = Column(Integer, ForeignKey("job_sites.id"), nullable=False)
     alert_type = Column(String, nullable=False) # e.g., "Left Geofence"
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+
+    '''
+    

@@ -1,4 +1,36 @@
 
+from fastapi import FastAPI
+from app.auth.routes import router as auth_router
+
+#To call create_all in developing fase.
+
+# Import all models so SQLAlchemy registers them and 
+from app.database.session import Base, engine
+import app.users.models
+#import app.jobsites.models
+#import app.projects.models
+
+Base.metadata.create_all(bind=engine)
+
+#End of create all in developing fase
+
+
+app = FastAPI(
+    title="TeamTrace API",
+    version="0.1.0"
+)
+
+
+app.include_router(auth_router)
+
+
+@app.get("/")
+def root():
+    return {
+        "message": "Welcome to TeamTrace API"
+    }
+
+'''
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -94,6 +126,8 @@ def update_employee(employee_id: int, employee: schemas.EmployeeUpdate, db: Sess
     return {"message": f"Employee {employee.id} updated successfully"}
 
 '''
+'''
+
     # --- 1. Endpoint to Register a New Employee ---
 @app.post("/register")
 def register_employee(full_name: str, email: str, password: str, db: Session = Depends(get_db)):
@@ -116,6 +150,7 @@ def register_employee(full_name: str, email: str, password: str, db: Session = D
     db.commit()
     db.refresh(new_employee)
     return {"message": "Employee registered successfully!", "id": new_employee.id}
+'''
 '''
 # --- 2. Endpoint to Login and get the Token ---
 @app.post("/login")
@@ -174,4 +209,4 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     # 2. Find the user in the DB
     user = db.query(models.Employee).filter(models.Employee.email == email).first()
     return {"full_name": user.full_name, "email": user.email, "status": "Authenticated"}
-   
+   '''

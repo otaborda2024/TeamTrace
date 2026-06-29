@@ -1,6 +1,7 @@
 import datetime
 from jose import jwt
 from passlib.context import CryptContext
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 # 1. Setup Password Hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -10,6 +11,10 @@ SECRET_KEY = "SUPER_SECRET_TEAM_TRACE_KEY_DO_NOT_SHARE"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 MAX_PASSWORD_LENGTH = 72
+
+
+# This looks for the token in the request headers
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # Function to turn a plain password into a secure hash
 def get_password_hash(password: str) -> str:
@@ -42,4 +47,7 @@ def decode_access_token(token: str):
         )
         return payload
     except JWTError:
-        return None    
+        return None 
+
+
+ 
