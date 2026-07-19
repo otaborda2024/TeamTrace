@@ -7,31 +7,27 @@ from app.auth import dependencies as auth_dependencies
 from app.auth import schemas as auth_schemas
 from app.database.session import get_db #, Base
 from app.users.schemas import UserCreate
+from app.users.constants import UserRole
 
-
-#app = FastAPI()
 
 router=APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
 
-# This looks for the token in the request headers
-#oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-
-
+#Register a company and its owner
 @router.post(
-    "/register",
-    response_model=auth_schemas.UserResponse
-)    
-def register_user(
-    user: UserCreate,
+    "/register-company",
+    summary="Register a new company and its owner"
+)
+def register_company(
+    data: auth_schemas.CompanyRegister,
     db: Session = Depends(get_db)
 ):
-    return auth_service.register_user(user, db)
+    return auth_service.register_company(data, db)
 
-
+#Login
 @router.post(   
     "/login",
     response_model=auth_schemas.Token,
@@ -49,9 +45,12 @@ def login(
     )
 
 
+#Get the current user
 @router.get(    
     "/me",
     response_model=auth_schemas.UserResponse
 )
 def me(current_user = Depends(auth_dependencies.get_current_user)):
     return current_user
+
+

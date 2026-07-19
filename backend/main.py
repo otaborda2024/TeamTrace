@@ -1,12 +1,13 @@
-
 from fastapi import FastAPI
 from app.auth.routes import router as auth_router
+from app.users.routes import router as users_router
 
 #To call create_all in developing fase.
 
 # Import all models so SQLAlchemy registers them and 
 from app.database.session import Base, engine
 import app.users.models
+import app.companies.models
 #import app.jobsites.models
 #import app.projects.models
 
@@ -22,6 +23,7 @@ app = FastAPI(
 
 
 app.include_router(auth_router)
+app.include_router(users_router)
 
 
 @app.get("/")
